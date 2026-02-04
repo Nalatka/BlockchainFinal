@@ -1,0 +1,14 @@
+{
+  "name": "moon-queue-frontend",
+  "version": "1.0.0",
+  "description": "Static frontend for Moon Queue token project served by a small Node.js server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
