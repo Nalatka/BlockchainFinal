@@ -1,5 +1,7 @@
-//SDPX -License-Identifier: MIT
+//SDPX-License-Identifier: MIT
 pragma solidity ^0.8.28;
+
+import "contracts/interface/tokenInterface.sol";
 
 contract Ilon {
 
@@ -12,7 +14,42 @@ contract Ilon {
         uint startAt;
         uint endAt;
         bool claimed;
+    };
+
+    tokenInterface public token;
+
+    mapping(uint => CrowdFunding) public crowdFundings;
+    cuint public crowdFundingCount;
+
+    constructor(address _token) {
+        token = tokenInterface(_token);
     }
+
+    function createCrowdFunding (
+        string memory _title,
+        string memory _description,
+        uint _goal,
+        uint _startAt,
+        uint _endAt
+    ) external {
+        require(_startAt >= block.timestamp, "Start time should be in the future");
+        require(_endAt > _startAt, "End time should be after start time");
+
+        crowdFundingCount += 1;
+
+        crowdFundings[crowdFundingCount] = CrowdFunding(
+            msg.sender,
+            _title,
+            _description,
+            _goal,
+            0,
+            _startAt,
+            _endAt,
+            false
+        );
+    }
+    
+    mapping(uint => mapping(address => uint)) public pledgedAmount;
 
 
 }

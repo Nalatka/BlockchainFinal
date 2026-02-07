@@ -1,7 +1,7 @@
-// SDPX-License Identifier: MIT
+//SDPX-License Identifier: MIT
 pragma solidity ^0.8.28;
 
-interface IToken {
+interface tokenInterface {
     function mint(address to, uint256 amount) external; 
     function burn(address from, uint256 amount) external;
     function transfer(address to, uint256 amount) external returns (bool);
