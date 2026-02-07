@@ -51,18 +51,31 @@ contract Ilon {
     
     mapping(uint => mapping(address => uint)) public pledgedAmount;
 
-    function contribute(uint _id, uint _amount) external {
+    function contribute(uint _id) payable public {
         CrowdFunding storage crowdFunding = crowdFundings[_id];
 
         require(block.timestamp >= crowdFunding.startAt, "Crowd funding hasn't started yet");
         require(block.timestamp <= crowdFunding.endAt, "Crowd funding has ended");
+        require(msg.value > 0, "Contribution should be greater than 0");
 
-        crowdFunding.pledged += _amount;
-        pledgedAmount[_id][msg.sender] += _amount;
+        crowdFunding.pledged += msg.value;
+        pledgedAmount[_id][msg.sender] += msg.value;
 
-        token.mint(msg.sender, _amount);
+        token.mint(msg.sender, msg.value);
     }   
-    
+    function claim(uint _id) public {
+        CrowdFunding storage crowdFunding = crowdFundings[_id];
+
+        require(msg.sender == crowdFunding.owner, "Only owner can claim");
+        require(block.timestamp > crowdFunding.endAt, "Crowd funding hasn't ended yet");
+        require(crowdFunding.pledged >= crowdFunding.goal, "Crowd funding goal not reached");
+        require(!crowdFunding.claimed, "Already claimed");
+
+        crowdFunding.claimed = true;
+
+        payable(crowdFunding.owner).transfer(crowdFunding.pledged);
+    }
+
 
 }
 
