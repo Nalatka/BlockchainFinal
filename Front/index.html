@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Moon Queue — Crowdfunding</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="card">
+      <div class="headerRow">
+        <div>
+          <h1>Moon Queue</h1>
+          <p class="muted">Contribute test ETH → earn MoonQueue tokens → top 15 leaderboard 🚀</p>
+        </div>
+        <div class="right">
+          <button id="btnConnect" class="btn primary">Connect MetaMask</button>
+          <div id="walletStatus" class="muted small">Not connected</div>
+        </div>
+      </div>
+
+      <div class="grid3">
+        <div class="stat">
+          <div class="label">Network</div>
+          <div id="networkStatus" class="value">—</div>
+          <div id="networkHint" class="muted small">—</div>
+        </div>
+        <div class="stat">
+          <div class="label">Test ETH balance</div>
+          <div id="ethBalance" class="value">—</div>
+          <div class="muted small">From wallet</div>
+        </div>
+        <div class="stat">
+          <div class="label">MoonQueue balance</div>
+          <div id="tokenBalance" class="value">—</div>
+          <div id="tokenMeta" class="muted small">—</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="grid2">
+      <!-- Create campaign -->
+      <section class="card">
+        <h2>Create crowdfunding</h2>
+        <p class="muted small">Calls <code>createCrowdFunding(title, description, goalWei, startAt, endAt)</code></p>
+
+        <label class="field">
+          <span>Title</span>
+          <input id="cTitle" type="text" placeholder="e.g., Fly with Ilon" />
+        </label>
+
+        <label class="field">
+          <span>Description</span>
+          <input id="cDesc" type="text" placeholder="Short description" />
+        </label>
+
+        <label class="field">
+          <span>Goal (ETH)</span>
+          <input id="cGoalEth" type="number" step="0.0001" placeholder="e.g., 1.0" />
+        </label>
+
+        <label class="field">
+          <span>StartAt (unix timestamp)</span>
+          <input id="cStartAt" type="number" placeholder="e.g., 1777770000" />
+        </label>
+
+        <label class="field">
+          <span>EndAt (unix timestamp)</span>
+          <input id="cEndAt" type="number" placeholder="e.g., 1778880000" />
+        </label>
+
+        <button id="btnCreateCampaign" class="btn">Create</button>
+
+        <div class="divider"></div>
+        <h3 class="smallTitle">Tx status</h3>
+        <div id="createTx" class="txBox muted small">—</div>
+      </section>
+
+      <!-- Contribute + Claim -->
+      <section class="card">
+        <h2>Contribute / Claim</h2>
+        <p class="muted small">Calls <code>contribute(id)</code> (payable) and <code>claim(id)</code></p>
+
+        <label class="field">
+          <span>Campaign ID</span>
+          <input id="campaignId" type="number" min="0" placeholder="e.g., 0" />
+        </label>
+
+        <label class="field">
+          <span>Amount (ETH)</span>
+          <input id="contribEth" type="number" step="0.0001" placeholder="e.g., 0.05" />
+        </label>
+
+        <div class="row">
+          <button id="btnContribute" class="btn">Contribute</button>
+          <button id="btnClaim" class="btn ghost">Claim</button>
+        </div>
+
+        <div class="divider"></div>
+        <h3 class="smallTitle">Tx status</h3>
+        <div id="contribTx" class="txBox muted small">—</div>
+      </section>
+
+      <!-- Campaigns list -->
+      <section class="card">
+        <div class="row">
+          <h2>Campaigns</h2>
+          <button id="btnRefreshCampaigns" class="btn ghost">Refresh</button>
+        </div>
+        <div id="campaignsList" class="list muted small">—</div>
+      </section>
+
+      <!-- Leaderboard -->
+      <section class="card">
+        <div class="row">
+          <h2>Leaderboard (top 15)</h2>
+          <button id="btnRefreshLeaderboard" class="btn ghost">Refresh</button>
+        </div>
+        <p class="muted small">
+          Built from <code>JoinedQueue</code> events → unique users → <code>balanceOf</code> → sort desc.
+        </p>
+        <div id="leaderboard" class="list muted small">—</div>
+      </section>
+    </main>
+
+    <footer class="muted small">Sepolia testnet • ethers.js • no React</footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
