@@ -14,12 +14,12 @@ contract Ilon {
         uint startAt;
         uint endAt;
         bool claimed;
-    };
+    }
 
     tokenInterface public token;
 
     mapping(uint => CrowdFunding) public crowdFundings;
-    cuint public crowdFundingCount;
+    uint public crowdFundingCount;
 
     constructor(address _token) {
         token = tokenInterface(_token);
@@ -51,6 +51,18 @@ contract Ilon {
     
     mapping(uint => mapping(address => uint)) public pledgedAmount;
 
+    function contribute(uint _id, uint _amount) external {
+        CrowdFunding storage crowdFunding = crowdFundings[_id];
+
+        require(block.timestamp >= crowdFunding.startAt, "Crowd funding hasn't started yet");
+        require(block.timestamp <= crowdFunding.endAt, "Crowd funding has ended");
+
+        crowdFunding.pledged += _amount;
+        pledgedAmount[_id][msg.sender] += _amount;
+
+        token.mint(msg.sender, _amount);
+    }   
+    
 
 }
 
