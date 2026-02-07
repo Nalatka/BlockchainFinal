@@ -14,7 +14,7 @@ contract MoonQueue is ERC20, Ownable {
 
     event JoinedQueue(address indexed user, uint256 tokensMinted);
 
-    constructor() ERC20("MoonQueue", "MQ") {
+    constructor() ERC20("MoonQueue", "MQ") Ownable(msg.sender) {
     }
 
     function joinQueue() external payable {
@@ -26,7 +26,7 @@ contract MoonQueue is ERC20, Ownable {
         emit JoinedQueue(msg.sender, TOKENS_PER_ENTRY);
     }
 
-    function mint(address to, uint256 amount) external {
+    function mint(address to, uint256 amount) external onlyOwner {
         _mint(to, amount);
     }
 
